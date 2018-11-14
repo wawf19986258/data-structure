@@ -37,6 +37,48 @@ bool search(BstNode* root, int data){
     }
 }
 
+int findMin_iterate(BstNode* root){//迭代寻找最小值
+    if(root == NULL){
+        cout << "Error: The tree is empty!" << endl;
+        return -1;
+    }
+    while(root->left != NULL){
+        root = root->left;
+    }
+    return root->data;
+}
+
+int findMax_iterate(BstNode* root){//迭代寻找最大值
+    if(root == NULL){
+        cout << "Error: The tree is empty!" << endl;
+        return -1;
+    }
+    while(root->right != NULL){
+        root = root->right;
+    }
+    return root->data;
+}
+
+int findMin_recursive(BstNode* root){//递归寻找最小值
+    if(root == NULL){
+        cout << "Error: The tree is empty!" << endl;
+        return -1;
+    }else if(root->left == NULL){
+        return root->data;
+    }
+    return findMin_recursive(root->left);
+}
+
+int findMax_recursive(BstNode* root){//递归寻找最大值
+    if(root == NULL){
+        cout << "Error: The tree is empty!" << endl;
+        return -1;
+    }else if(root->right == NULL){
+        return root->data;
+    }
+    return findMax_recursive(root->right);
+}
+
 int main(){
     BstNode* root = NULL;
     root = insert(root, 7);
@@ -45,12 +87,8 @@ int main(){
     root = insert(root, 10);
     root = insert(root, 3);
     root = insert(root, 5);
-    int num;
-    cin >> num;
-    if(search(root, num))
-        cout << "Found" << endl;
-    else
-        cout << "notFound" << endl;
+    cout << findMin_recursive(root) << endl;
+    cout << findMax_recursive(root) << endl;
     return 0;
 }
 
