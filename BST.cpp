@@ -79,6 +79,16 @@ int findMax_recursive(BstNode* root){//递归寻找最大值
     return findMax_recursive(root->right);
 }
 
+int max(int a, int b){
+    if(a > b) return a;
+    else return b;
+}
+
+int findHeight(BstNode* root){
+    if(root == NULL) return -1;
+    return max(findHeight(root->left), findHeight(root->right))+1;
+}
+
 int main(){
     BstNode* root = NULL;
     root = insert(root, 7);
@@ -86,9 +96,7 @@ int main(){
     root = insert(root, 8);
     root = insert(root, 10);
     root = insert(root, 3);
-    root = insert(root, 5);
-    cout << findMin_recursive(root) << endl;
-    cout << findMax_recursive(root) << endl;
+    cout << findHeight(root) << endl;
     return 0;
 }
 
