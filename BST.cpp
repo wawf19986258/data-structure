@@ -1,6 +1,8 @@
 #include<iostream>
 #include<queue>
 using namespace std;
+#define MIN -999
+#define MAX 999
 
 struct BstNode{
     int data;
@@ -123,6 +125,21 @@ void postOrder(BstNode* root){
     cout << root->data << " ";
 }
 
+bool isBstUtil(BstNode* root, int Min, int Max){
+    if(root == NULL) return true;
+    if(Min < root->data && root->data < Max &&
+       isBstUtil(root->left, Min, root->data) &&
+       isBstUtil(root->right, root->data, Max)){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+bool isBst(BstNode* root){
+    return isBstUtil(root, MIN, MAX);
+}
+
 int main(){
     BstNode* root = NULL;
     root = insert(root, 7);
@@ -130,16 +147,10 @@ int main(){
     root = insert(root, 8);
     root = insert(root, 10);
     root = insert(root, 3);
-    levelOrder(root);
-    cout << endl;
-    preOrder(root);
-    cout << endl;
-    inOrder(root);
-    cout << endl;
-    postOrder(root);
-    cout << endl;
+    cout << isBst(root) << endl;
     return 0;
 }
+
 
 
 
