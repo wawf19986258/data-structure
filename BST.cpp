@@ -40,44 +40,55 @@ bool search(BstNode* root, int data){
     }
 }
 
-int findMin_iterate(BstNode* root){//迭代寻找最小值
+BstNode* find(BstNode* root, int data){
+    if(root == NULL) return NULL;
+    if(data < root->data){
+        return find(root->left, data);
+    }else if(root->data < data){
+        return find(root->right, data);
+    }else{
+        return root;
+    }
+}
+
+BstNode* findMin_iterate(BstNode* root){//迭代寻找最小值
     if(root == NULL){
         cout << "Error: The tree is empty!" << endl;
-        return -1;
+        return NULL;
     }
     while(root->left != NULL){
         root = root->left;
     }
-    return root->data;
+    return root;
 }
 
-int findMax_iterate(BstNode* root){//迭代寻找最大值
+BstNode* findMax_iterate(BstNode* root){//迭代寻找最大值
     if(root == NULL){
         cout << "Error: The tree is empty!" << endl;
-        return -1;
+        return NULL;
     }
     while(root->right != NULL){
         root = root->right;
     }
-    return root->data;
+    return root;
 }
 
-int findMin_recursive(BstNode* root){//递归寻找最小值
+BstNode* findMin_recursive(BstNode* root){//递归寻找最小值
     if(root == NULL){
         cout << "Error: The tree is empty!" << endl;
-        return -1;
+        return NULL;
     }else if(root->left == NULL){
-        return root->data;
+        return root;
     }
     return findMin_recursive(root->left);
 }
 
-int findMax_recursive(BstNode* root){//递归寻找最大值
+BstNode* findMax_recursive(BstNode* root){//递归寻找最大值
     if(root == NULL){
         cout << "Error: The tree is empty!" << endl;
-        return -1;
+        return NULL;
     }else if(root->right == NULL){
-        return root->data;
+        return root;
     }
     return findMax_recursive(root->right);
 }
@@ -160,12 +171,32 @@ BstNode* Bst_delete(BstNode* root, int data){
             root = root->left;
             delete p;
         }else{
-            int right_min = findMin_iterate(root->right);
-            root->data = right_min;
-            root->right = Bst_delete(root->right, right_min);
+            BstNode* temp = findMin_iterate(root->right);
+            root->data = temp->data;
+            root->right = Bst_delete(root->right, temp->data);
         }
     }
     return root;
+}
+
+BstNode* getInOrderSuccessor(BstNode* root, int data){
+    BstNode* current = find(root, data);
+    if(current == NULL) return NULL;
+    if(current->right != NULL){
+        return findMin_iterate(current->right);
+    }else{
+        BstNode* successor = NULL;
+        BstNode* ancestor = root;
+        while(ancestor != current){
+            if(current->data < ancestor->data){
+                successor = ancestor;
+                ancestor = ancestor->left;
+            }else{
+                ancestor = ancestor->right;
+            }
+        }
+        return successor;
+    }
 }
 
 int main(){
@@ -175,8 +206,7 @@ int main(){
     root = insert(root,1); root = insert(root,11);
     inOrder(root);
     cout << endl;
-    root = Bst_delete(root, 5);
-    inOrder(root);
+    cout << getInOrderSuccessor(root, 1)->data;
     cout << endl;
     return 0;
 }
