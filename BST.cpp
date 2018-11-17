@@ -140,17 +140,46 @@ bool isBst(BstNode* root){
     return isBstUtil(root, MIN, MAX);
 }
 
-int main(){
-    BstNode* root = NULL;
-    root = insert(root, 7);
-    root = insert(root, 6);
-    root = insert(root, 8);
-    root = insert(root, 10);
-    root = insert(root, 3);
-    cout << isBst(root) << endl;
-    return 0;
+BstNode* Bst_delete(BstNode* root, int data){
+    if(root == NULL)
+        return root;
+    else if(data < root->data){
+        Bst_delete(root->left, data);
+    }else if(root->data < data){
+        Bst_delete(root->right, data);
+    }else{
+        if(root->left == NULL && root->right == NULL){
+            delete root;
+            root = NULL;
+        }else if(root->left == NULL){
+            BstNode* p = root;
+            root = root->right;
+            delete p;
+        }else if(root->right == NULL){
+            BstNode* p = root;
+            root = root->left;
+            delete p;
+        }else{
+            int right_min = findMin_iterate(root->right);
+            root->data = right_min;
+            root->right = Bst_delete(root->right, right_min);
+        }
+    }
+    return root;
 }
 
+int main(){
+    BstNode* root = NULL;
+    root = insert(root,5); root = insert(root,10);
+    root = insert(root,3); root = insert(root,4);
+    root = insert(root,1); root = insert(root,11);
+    inOrder(root);
+    cout << endl;
+    root = Bst_delete(root, 5);
+    inOrder(root);
+    cout << endl;
+    return 0;
+}
 
 
 
